@@ -3,166 +3,39 @@ package com.serqet.serqet;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
-import android.content.BroadcastReceiver;
-import android.content.Context;
+import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Set;
+import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 
 
 public class Serqet extends Activity {
-    private static final int REQUEST_ENABLE_BT = 1;
-    private Button onBtn;
-    private Button offBtn;
-    private Button listBtn;
-    private Button findBtn;
-    private TextView text;
-    private BluetoothAdapter mBluetoothAdapter;
-    private Set<BluetoothDevice> pairedDevices;
-    private ListView myListView;
-    private ArrayAdapter<String> BTArrayAdapter;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_serqet);
 
-        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        if (mBluetoothAdapter == null) {
-            // Device does not support Bluetooth
-            text.setText("Status: not supported");
-        } else {
-            text = (TextView) findViewById(R.id.text);
-            onBtn = (Button)findViewById(R.id.turnOn);
-            onBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    on(v);
-                }
-            });
-
-            offBtn = (Button)findViewById(R.id.turnOff);
-            offBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    off(v);
-                }
-            });
-
-            listBtn = (Button)findViewById(R.id.paired);
-            listBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    list(v);
-                }
-            });
-
-            findBtn = (Button)findViewById(R.id.search);
-            findBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    find(v);
-                }
-            });
-
-
-            myListView = (ListView)findViewById(R.id.listView1);
-            BTArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
-            myListView.setAdapter(BTArrayAdapter);
-        }
     }
 
-    public void on(View view){
-        if (!mBluetoothAdapter.isEnabled()) {
-            Intent turnOnIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(turnOnIntent, REQUEST_ENABLE_BT);
-
-            Toast.makeText(getApplicationContext(), "Bluetooth turned on",
-                    Toast.LENGTH_LONG).show();
-        }
-        else{
-            Toast.makeText(getApplicationContext(),"Bluetooth is already on",
-                    Toast.LENGTH_LONG).show();
-        }
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        // TODO Auto-generated method stub
-        if(requestCode == REQUEST_ENABLE_BT){
-            if(mBluetoothAdapter.isEnabled()) {
-                text.setText("Status: Enabled");
-            } else {
-                text.setText("Status: Disabled");
-            }
-        }
-    }
-
-    public void list(View view){
-        // get paired devices
-        pairedDevices = mBluetoothAdapter.getBondedDevices();
-
-        // put it's one to the adapter
-        for(BluetoothDevice device : pairedDevices)
-            BTArrayAdapter.add(device.getName()+ "\n" + device.getAddress());
-
-        Toast.makeText(getApplicationContext(),"Show Paired Devices",
-                Toast.LENGTH_SHORT).show();
-
-    }
-
-    final BroadcastReceiver bReceiver = new BroadcastReceiver() {
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-            // When discovery finds a device
-            if (BluetoothDevice.ACTION_FOUND.equals(action)) {
-                // Get the BluetoothDevice object from the Intent
-                BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-                // add the name and the MAC address of the object to the arrayAdapter
-                BTArrayAdapter.add(device.getName() + "\n" + device.getAddress());
-                BTArrayAdapter.notifyDataSetChanged();
-            }
-        }
-    };
-
-    public void find(View view) {
-        if (mBluetoothAdapter.isDiscovering()) {
-            // the button is pressed when it discovers, so cancel the discovery
-            mBluetoothAdapter.cancelDiscovery();
-        }
-        else {
-            BTArrayAdapter.clear();
-            mBluetoothAdapter.startDiscovery();
-
-            registerReceiver(bReceiver, new IntentFilter(BluetoothDevice.ACTION_FOUND));
-        }
-    }
-
-
-    public void off(View view){
-        mBluetoothAdapter.disable();
-        text.setText("Status: Disconnected");
-
-        Toast.makeText(getApplicationContext(),"Bluetooth turned off",
-                Toast.LENGTH_LONG).show();
-    }
 
     @Override
     protected void onDestroy() {
         // TODO Auto-generated method stub
         super.onDestroy();
-        unregisterReceiver(bReceiver);
     }
 
     @Override
@@ -182,6 +55,91 @@ public class Serqet extends Activity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void manageBluetooth (View view ) {
+        BluetoothSocket mmSocket;
+
+        TextView textView = new TextView(this);
+        textView.setTextSize(40);
+        // Set the text view as the activity layout
+        setContentView(textView);
+
+
+        InputStream mmInStream=null;
+
+        BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        if (mBluetoothAdapter == null) {
+            // Device does not support Bluetooth
+        }
+
+        if (!mBluetoothAdapter.isEnabled()) {
+            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(enableBtIntent, 1);
+        }
+
+        Set<BluetoothDevice> pairedDevices =  BluetoothAdapter.getDefaultAdapter().getBondedDevices(); // get list of paired devices
+        BluetoothDevice mmDevice = null;
+
+        for (BluetoothDevice device : pairedDevices) {
+            String name = device.getName();
+            if (name.contains("HC-05")) {
+                mmDevice = BluetoothAdapter.getDefaultAdapter().getRemoteDevice(device.getAddress());
+                Toast.makeText(getApplicationContext(), "Retrieved paired device",
+                        Toast.LENGTH_SHORT).show();
+                break;
+            }
+        }
+
+        UUID uuid = UUID.fromString("00001101-0000-1000-8000-00805f9b34fb"); // Standard SerialPortService ID
+        try {
+            mBluetoothAdapter.cancelDiscovery();
+            mmSocket = mmDevice.createInsecureRfcommSocketToServiceRecord(uuid);
+            try {
+                mmSocket.connect();
+                try {
+                    mmInStream = mmSocket.getInputStream();
+
+                    Toast.makeText(getApplicationContext(), "Connected",
+                            Toast.LENGTH_SHORT).show();
+
+
+                } catch (IOException e_getin) {
+                }
+            } catch (IOException econnect) {
+            }
+        } catch (IOException ecreate) {
+        }
+
+        byte[] buffer = new byte[1024];  // buffer store for the stream
+        char[] cBuffer = new char[1024];  // buffer store for the stream
+
+
+        int bytes; // bytes returned from read()
+
+        // Keep listening to the InputStream until an exception occurs
+       // while (true)
+        try {
+            // Read from the InputStream
+//            bytes = mmInStream.read(buffer);
+            InputStreamReader mInputStreamReader = new InputStreamReader(mmInStream);
+            int num = mInputStreamReader.read (cBuffer, 0, 40);
+
+
+            // Send the obtained bytes to the UI activity
+
+            Log.i("Serqet", "Serqet.getView() - got bytes " + num);
+
+            // Create the text view
+
+            textView.append(new String(cBuffer));
+
+
+
+        } catch (IOException e) {
+        }
+
+
     }
 
 }
