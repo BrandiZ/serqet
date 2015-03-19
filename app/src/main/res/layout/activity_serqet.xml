@@ -1,19 +1,101 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity" >
+    tools:context=".MainActivity"
+    android:columnCount="2"
+    android:rowCount="1"
+    android:id="@+id/mainAppLayout"
+    android:orientation="horizontal">
 
-    <Button
-        android:id="@+id/bluetooth"
+
+    <TextureView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/bluetooth"
-        android:onClick="manageBluetooth"/>
+        android:layout_height="match_parent"
+        android:id="@+id/graphView"
+        android:layout_weight="10"
+        android:layout_margin="5dp" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/settingsLayout"
+        android:layout_weight="30"
+        android:layout_gravity="right"
+        android:layout_margin="5dp">
 
+        <ToggleButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/triggerEdgeButton"
+            android:layout_gravity="center_horizontal"
+            android:textOff="Rising Edge"
+            android:textOn="Falling Edge"
+            android:layout_margin="5dp" />
 
-</RelativeLayout>
+        <ToggleButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/couplingButton"
+            android:layout_gravity="center_horizontal"
+            android:textOff="AC Coupling"
+            android:textOn="DC Coupling"
+            android:layout_margin="5dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Voltage Range"
+            android:id="@+id/voltageRangeText"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="15dp" />
+
+        <SeekBar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/voltageRangeSeekBar"
+            android:indeterminate="false" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Voltage Offset"
+            android:id="@+id/voltageOffsetText"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="15dp" />
+
+        <SeekBar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/voltageOffsetSeekBar" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Time Range"
+            android:id="@+id/timeRangeText"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="15dp" />
+
+        <SeekBar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/timeRangeSeekBar" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Time Offset"
+            android:id="@+id/timeOffsetText"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="15dp" />
+
+        <SeekBar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/timeOffsetSeekBar"
+            android:indeterminate="false" />
+    </LinearLayout>
+
+</LinearLayout>
