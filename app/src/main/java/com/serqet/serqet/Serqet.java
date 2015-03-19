@@ -51,7 +51,7 @@ public class Serqet extends Activity {
 
     private int[] AVERAGING_MODES = {1, 2, 4, 8};
     private double VOLTAGE_RANGE_MAX = 30;
-    private double VOLTAGE_RANGE_MIN = 0;
+    private double VOLTAGE_RANGE_MIN = 0.001;
     private double VOLTAGE_OFFSET_MAX = 15;
     private double VOLTAGE_OFFSET_MIN = -15;
     private double TIME_RANGE_MAX = 10;
@@ -145,9 +145,9 @@ public class Serqet extends Activity {
     }
 
     public void updateSettings(){
-        voltageRangeValue = getValueFromBar(voltageRangeBar, VOLTAGE_RANGE_MAX, VOLTAGE_RANGE_MIN);
+        voltageRangeValue = getRangeValueFromBar(voltageRangeBar, VOLTAGE_RANGE_MAX, VOLTAGE_RANGE_MIN);
         voltageOffsetValue = getValueFromBar(voltageOffsetBar, VOLTAGE_OFFSET_MAX, VOLTAGE_OFFSET_MIN);
-        timeRangeValue = getValueFromBar(timeRangeBar, TIME_RANGE_MAX, TIME_RANGE_MIN);
+        timeRangeValue = getRangeValueFromBar(timeRangeBar, TIME_RANGE_MAX, TIME_RANGE_MIN);
         timeOffsetValue = getValueFromBar(timeOffsetBar, TIME_OFFSET_MAX, TIME_OFFSET_MIN);
         triggerLevelValue = getValueFromBar(triggerLevelBar, TRIGGER_LEVEL_MAX, TRIGGER_LEVEL_MIN);
         averagingValue = AVERAGING_MODES[averagingBar.getProgress()];
@@ -164,7 +164,13 @@ public class Serqet extends Activity {
     }
 
     public double getValueFromBar(SeekBar bar, double max, double min){
-        return (((float)bar.getProgress())/bar.getMax()) * (max - min) + min;
+        float fraction = ((float)bar.getProgress()) / bar.getMax();
+        return (fraction) * (max - min) + min;
+    }
+
+    public double getRangeValueFromBar(SeekBar bar, double max, double min){
+        float fraction = ((float)bar.getProgress()) / bar.getMax();
+        return Math.exp((fraction) * (Math.log(max) - Math.log(min)) + Math.log(min));
     }
 
     public void manageBluetooth (View view ) {
