@@ -16,212 +16,218 @@
         android:layout_weight="10"
         android:layout_margin="5dp" />
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:id="@+id/settingsLayout"
-        android:layout_weight="30"
-        android:layout_gravity="right"
-        android:layout_margin="5dp">
-
-        <ToggleButton
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/couplingButton"
-            android:layout_gravity="center_horizontal"
-            android:textOff="AC Coupling"
-            android:textOn="DC Coupling"
-            android:layout_margin="5dp"
-            android:onClick="onCouplingButtonClick" />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/scrollView"
+        android:layout_weight="20">
 
         <LinearLayout
-            android:orientation="horizontal"
+            android:orientation="vertical"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp">
+            android:layout_height="fill_parent"
+            android:id="@+id/settingsLayout"
+            android:layout_gravity="right"
+            android:layout_margin="5dp">
 
-            <TextView
-                android:layout_width="wrap_content"
+            <ToggleButton
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Voltage Range"
-                android:id="@+id/voltageRangeText"
-                android:layout_weight="1"
-                android:layout_gravity="left" />
+                android:id="@+id/couplingButton"
+                android:layout_gravity="center_horizontal"
+                android:textOff="AC Coupling"
+                android:textOn="DC Coupling"
+                android:layout_margin="5dp"
+                android:onClick="onCouplingButtonClick" />
 
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="0V"
-                android:id="@+id/voltageRangeValue"
-                android:layout_gravity="right" />
+                android:layout_marginTop="15dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Voltage Range"
+                    android:id="@+id/voltageRangeText"
+                    android:layout_weight="1"
+                    android:layout_gravity="left" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0V"
+                    android:id="@+id/voltageRangeValue"
+                    android:layout_gravity="right" />
+            </LinearLayout>
+
+            <SeekBar
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/voltageRangeSeekBar"
+                android:indeterminate="false" />
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Voltage Offset"
+                    android:id="@+id/voltageOffsetText"
+                    android:layout_weight="1"
+                    android:layout_gravity="left" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0V"
+                    android:id="@+id/voltageOffsetValue"
+                    android:layout_gravity="right" />
+            </LinearLayout>
+
+            <SeekBar
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/voltageOffsetSeekBar" />
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Time Range"
+                    android:id="@+id/timeRangeText"
+                    android:layout_weight="1"
+                    android:layout_gravity="left" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0V"
+                    android:id="@+id/timeRangeValue"
+                    android:layout_gravity="right" />
+            </LinearLayout>
+
+            <SeekBar
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/timeRangeSeekBar" />
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Time Offset"
+                    android:id="@+id/timeOffsetText"
+                    android:layout_weight="1"
+                    android:layout_gravity="left" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0V"
+                    android:id="@+id/timeOffsetValue"
+                    android:layout_gravity="right" />
+            </LinearLayout>
+
+            <SeekBar
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/timeOffsetSeekBar"
+                android:indeterminate="false" />
+
+            <ToggleButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/triggerEdgeButton"
+                android:layout_gravity="center_horizontal"
+                android:textOff="Rising Edge"
+                android:textOn="Falling Edge"
+                android:layout_margin="5dp"
+                android:onClick="onTriggerEdgeButtonClick" />
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Trigger Level"
+                    android:id="@+id/triggerLevelText"
+                    android:layout_weight="1"
+                    android:layout_gravity="left" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0V"
+                    android:id="@+id/triggerLevelValue"
+                    android:layout_gravity="right" />
+            </LinearLayout>
+
+            <SeekBar
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/triggerLevelSeekBar"
+                android:indeterminate="false" />
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Averaging"
+                    android:id="@+id/averagingText"
+                    android:layout_weight="1"
+                    android:layout_gravity="left" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Off"
+                    android:id="@+id/averagingValue"
+                    android:layout_gravity="right" />
+            </LinearLayout>
+
+            <SeekBar
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/averagingSeekBar"
+                android:indeterminate="false" />
         </LinearLayout>
-
-        <SeekBar
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/voltageRangeSeekBar"
-            android:indeterminate="false" />
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Voltage Offset"
-                android:id="@+id/voltageOffsetText"
-                android:layout_weight="1"
-                android:layout_gravity="left" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="0V"
-                android:id="@+id/voltageOffsetValue"
-                android:layout_gravity="right" />
-        </LinearLayout>
-
-        <SeekBar
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/voltageOffsetSeekBar" />
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Time Range"
-                android:id="@+id/timeRangeText"
-                android:layout_weight="1"
-                android:layout_gravity="left" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="0V"
-                android:id="@+id/timeRangeValue"
-                android:layout_gravity="right" />
-        </LinearLayout>
-
-        <SeekBar
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/timeRangeSeekBar" />
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Time Offset"
-                android:id="@+id/timeOffsetText"
-                android:layout_weight="1"
-                android:layout_gravity="left" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="0V"
-                android:id="@+id/timeOffsetValue"
-                android:layout_gravity="right" />
-        </LinearLayout>
-
-        <SeekBar
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/timeOffsetSeekBar"
-            android:indeterminate="false" />
-
-        <ToggleButton
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/triggerEdgeButton"
-            android:layout_gravity="center_horizontal"
-            android:textOff="Rising Edge"
-            android:textOn="Falling Edge"
-            android:layout_margin="5dp"
-            android:onClick="onTriggerEdgeButtonClick" />
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Trigger Level"
-                android:id="@+id/triggerLevelText"
-                android:layout_weight="1"
-                android:layout_gravity="left" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="0V"
-                android:id="@+id/triggerLevelValue"
-                android:layout_gravity="right" />
-        </LinearLayout>
-
-        <SeekBar
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/triggerLevelSeekBar"
-            android:indeterminate="false" />
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Averaging"
-                android:id="@+id/averagingText"
-                android:layout_weight="1"
-                android:layout_gravity="left" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Off"
-                android:id="@+id/averagingValue"
-                android:layout_gravity="right" />
-        </LinearLayout>
-
-        <SeekBar
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/averagingSeekBar"
-            android:indeterminate="false" />
-    </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>
