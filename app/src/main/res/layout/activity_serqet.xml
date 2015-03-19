@@ -28,28 +28,36 @@
         <ToggleButton
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/triggerEdgeButton"
-            android:layout_gravity="center_horizontal"
-            android:textOff="Rising Edge"
-            android:textOn="Falling Edge"
-            android:layout_margin="5dp" />
-
-        <ToggleButton
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:id="@+id/couplingButton"
             android:layout_gravity="center_horizontal"
             android:textOff="AC Coupling"
             android:textOn="DC Coupling"
-            android:layout_margin="5dp" />
+            android:layout_margin="5dp"
+            android:onClick="onCouplingButtonClick" />
 
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Voltage Range"
-            android:id="@+id/voltageRangeText"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="15dp" />
+            android:layout_marginTop="15dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Voltage Range"
+                android:id="@+id/voltageRangeText"
+                android:layout_weight="1"
+                android:layout_gravity="left" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0V"
+                android:id="@+id/voltageRangeValue"
+                android:layout_gravity="right" />
+        </LinearLayout>
 
         <SeekBar
             android:layout_width="match_parent"
@@ -57,44 +65,162 @@
             android:id="@+id/voltageRangeSeekBar"
             android:indeterminate="false" />
 
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Voltage Offset"
-            android:id="@+id/voltageOffsetText"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="15dp" />
+            android:layout_marginTop="15dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Voltage Offset"
+                android:id="@+id/voltageOffsetText"
+                android:layout_weight="1"
+                android:layout_gravity="left" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0V"
+                android:id="@+id/voltageOffsetValue"
+                android:layout_gravity="right" />
+        </LinearLayout>
 
         <SeekBar
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/voltageOffsetSeekBar" />
 
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Time Range"
-            android:id="@+id/timeRangeText"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="15dp" />
+            android:layout_marginTop="15dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Time Range"
+                android:id="@+id/timeRangeText"
+                android:layout_weight="1"
+                android:layout_gravity="left" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0V"
+                android:id="@+id/timeRangeValue"
+                android:layout_gravity="right" />
+        </LinearLayout>
 
         <SeekBar
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/timeRangeSeekBar" />
 
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Time Offset"
-            android:id="@+id/timeOffsetText"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="15dp" />
+            android:layout_marginTop="15dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Time Offset"
+                android:id="@+id/timeOffsetText"
+                android:layout_weight="1"
+                android:layout_gravity="left" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0V"
+                android:id="@+id/timeOffsetValue"
+                android:layout_gravity="right" />
+        </LinearLayout>
 
         <SeekBar
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/timeOffsetSeekBar"
+            android:indeterminate="false" />
+
+        <ToggleButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/triggerEdgeButton"
+            android:layout_gravity="center_horizontal"
+            android:textOff="Rising Edge"
+            android:textOn="Falling Edge"
+            android:layout_margin="5dp"
+            android:onClick="onTriggerEdgeButtonClick" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Trigger Level"
+                android:id="@+id/triggerLevelText"
+                android:layout_weight="1"
+                android:layout_gravity="left" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0V"
+                android:id="@+id/triggerLevelValue"
+                android:layout_gravity="right" />
+        </LinearLayout>
+
+        <SeekBar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/triggerLevelSeekBar"
+            android:indeterminate="false" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Averaging"
+                android:id="@+id/averagingText"
+                android:layout_weight="1"
+                android:layout_gravity="left" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Off"
+                android:id="@+id/averagingValue"
+                android:layout_gravity="right" />
+        </LinearLayout>
+
+        <SeekBar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/averagingSeekBar"
             android:indeterminate="false" />
     </LinearLayout>
 

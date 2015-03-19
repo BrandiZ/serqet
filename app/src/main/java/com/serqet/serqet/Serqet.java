@@ -10,24 +10,101 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Set;
 import java.util.UUID;
-import java.util.concurrent.ExecutionException;
 
 
 public class Serqet extends Activity {
+
+    private ToggleButton couplingButton;
+    private ToggleButton triggerEdgeButton;
+
+    private SeekBar voltageRangeBar;
+    private SeekBar voltageOffsetBar;
+    private SeekBar timeRangeBar;
+    private SeekBar timeOffsetBar;
+
+    private SeekBar triggerLevelBar;
+    private SeekBar averagingBar;
+
+    private TextView voltageRangeValueText;
+    private TextView voltageOffsetValueText;
+    private TextView timeRangeValueText;
+    private TextView timeOffsetValueText;
+    private TextView triggerLevelValueText;
+    private TextView averagingValueText;
+
+    private double voltageRangeValue;
+    private double voltageOffsetValue;
+    private double timeRangeValue;
+    private double timeOffsetValue;
+    private double triggerLevelValue;
+    private int averagingValue;
+
+    private int[] AVERAGING_MODES = {1, 2, 4, 8};
+    private double VOLTAGE_RANGE_MAX = 30;
+    private double VOLTAGE_RANGE_MIN = 0;
+    private double VOLTAGE_OFFSET_MAX = 15;
+    private double VOLTAGE_OFFSET_MIN = -15;
+    private double TIME_RANGE_MAX = 10;
+    private double TIME_RANGE_MIN = 0.001;
+    private double TIME_OFFSET_MAX = 10;
+    private double TIME_OFFSET_MIN = 0;
+    private double TRIGGER_LEVEL_MAX = 15;
+    private double TRIGGER_LEVEL_MIN = -15;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_serqet);
+
+        couplingButton = (ToggleButton) findViewById(R.id.couplingButton);
+        triggerEdgeButton = (ToggleButton) findViewById(R.id.triggerEdgeButton);
+
+        voltageRangeBar = (SeekBar) findViewById(R.id.voltageRangeSeekBar);
+        voltageOffsetBar = (SeekBar) findViewById(R.id.voltageOffsetSeekBar);
+        timeRangeBar = (SeekBar) findViewById(R.id.timeRangeSeekBar);
+        timeOffsetBar = (SeekBar) findViewById(R.id.timeOffsetSeekBar);
+        triggerLevelBar = (SeekBar) findViewById(R.id.triggerLevelSeekBar);
+        averagingBar = (SeekBar) findViewById(R.id.averagingSeekBar);
+
+        voltageRangeValueText = (TextView) findViewById(R.id.voltageRangeValue);
+        voltageOffsetValueText = (TextView) findViewById(R.id.voltageOffsetValue);
+        timeRangeValueText = (TextView) findViewById(R.id.timeRangeValue);
+        timeOffsetValueText = (TextView) findViewById(R.id.timeOffsetValue);
+        triggerLevelValueText = (TextView) findViewById(R.id.triggerLevelValue);
+        averagingValueText = (TextView) findViewById(R.id.averagingValue);
+
+        SeekBar.OnSeekBarChangeListener seekBarListener = new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {}
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {}
+
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                updateSettings();
+            }
+        };
+
+        averagingBar.setMax(AVERAGING_MODES.length - 1);
+
+        voltageRangeBar.setOnSeekBarChangeListener(seekBarListener);
+        voltageOffsetBar.setOnSeekBarChangeListener(seekBarListener);
+        timeRangeBar.setOnSeekBarChangeListener(seekBarListener);
+        timeOffsetBar.setOnSeekBarChangeListener(seekBarListener);
+
+        triggerLevelBar.setOnSeekBarChangeListener(seekBarListener);
+        averagingBar.setOnSeekBarChangeListener(seekBarListener);
 
     }
 
@@ -55,6 +132,35 @@ public class Serqet extends Activity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void onCouplingButtonClick(View view) {
+        updateSettings();
+    }
+
+    public void onTriggerEdgeButtonClick(View view) {
+        updateSettings();
+    }
+
+    public void updateSettings(){
+        voltageRangeValue = getValueFromBar(voltageRangeBar, VOLTAGE_RANGE_MAX, VOLTAGE_RANGE_MIN);
+        voltageOffsetValue = getValueFromBar(voltageOffsetBar, VOLTAGE_OFFSET_MAX, VOLTAGE_OFFSET_MIN);
+        timeRangeValue = getValueFromBar(timeRangeBar, TIME_RANGE_MAX, TIME_RANGE_MIN);
+        timeOffsetValue = getValueFromBar(timeOffsetBar, TIME_OFFSET_MAX, TIME_OFFSET_MIN);
+        triggerLevelValue = getValueFromBar(triggerLevelBar, TRIGGER_LEVEL_MAX, TRIGGER_LEVEL_MIN);
+        averagingValue = AVERAGING_MODES[averagingBar.getProgress()];
+
+        voltageRangeValueText.setText(voltageRangeValue + "V");
+        voltageOffsetValueText.setText(voltageOffsetValue + "V");
+        timeRangeValueText.setText(timeRangeValue + "s");
+        timeOffsetValueText.setText(timeOffsetValue + "s");
+
+
+        System.out.println("update");
+    }
+
+    public double getValueFromBar(SeekBar bar, double max, double min){
+        return (((float)bar.getProgress())/bar.getMax()) * (max - min) + min;
     }
 
     public void manageBluetooth (View view ) {
