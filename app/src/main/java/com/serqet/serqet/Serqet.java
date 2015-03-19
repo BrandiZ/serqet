@@ -106,6 +106,8 @@ public class Serqet extends Activity {
         triggerLevelBar.setOnSeekBarChangeListener(seekBarListener);
         averagingBar.setOnSeekBarChangeListener(seekBarListener);
 
+
+        updateSettings();
     }
 
 
@@ -150,11 +152,13 @@ public class Serqet extends Activity {
         triggerLevelValue = getValueFromBar(triggerLevelBar, TRIGGER_LEVEL_MAX, TRIGGER_LEVEL_MIN);
         averagingValue = AVERAGING_MODES[averagingBar.getProgress()];
 
-        voltageRangeValueText.setText(voltageRangeValue + "V");
-        voltageOffsetValueText.setText(voltageOffsetValue + "V");
-        timeRangeValueText.setText(timeRangeValue + "s");
-        timeOffsetValueText.setText(timeOffsetValue + "s");
+        voltageRangeValueText.setText(String.format("%.3fV", voltageRangeValue));
+        voltageOffsetValueText.setText(String.format("%.3fV", voltageOffsetValue));
+        timeRangeValueText.setText(String.format("%.3fs", timeRangeValue));
+        timeOffsetValueText.setText(String.format("%.3fs", timeOffsetValue));
 
+        triggerLevelValueText.setText(String.format("%.3fV", triggerLevelValue));
+        averagingValueText.setText(averagingValue == 1 ? "Off" : averagingValue + "x");
 
         System.out.println("update");
     }

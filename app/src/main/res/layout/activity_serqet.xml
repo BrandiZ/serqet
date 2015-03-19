@@ -118,7 +118,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="0V"
+                    android:text="0s"
                     android:id="@+id/timeRangeValue"
                     android:layout_gravity="right" />
             </LinearLayout>
@@ -147,7 +147,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="0V"
+                    android:text="0s"
                     android:id="@+id/timeOffsetValue"
                     android:layout_gravity="right" />
             </LinearLayout>
