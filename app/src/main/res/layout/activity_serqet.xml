@@ -68,7 +68,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/voltageRangeSeekBar"
-                android:indeterminate="false" />
+                android:indeterminate="false"
+                android:progress="50" />
 
             <LinearLayout
                 android:orientation="horizontal"
@@ -97,7 +98,8 @@
             <SeekBar
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/voltageOffsetSeekBar" />
+                android:id="@+id/voltageOffsetSeekBar"
+                android:progress="50" />
 
             <LinearLayout
                 android:orientation="horizontal"
@@ -126,7 +128,8 @@
             <SeekBar
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/timeRangeSeekBar" />
+                android:id="@+id/timeRangeSeekBar"
+                android:progress="50" />
 
             <LinearLayout
                 android:orientation="horizontal"
@@ -196,7 +199,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/triggerLevelSeekBar"
-                android:indeterminate="false" />
+                android:indeterminate="false"
+                android:progress="50" />
 
             <LinearLayout
                 android:orientation="horizontal"

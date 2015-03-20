@@ -15,6 +15,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.series.LineGraphSeries;
+import com.jjoe64.graphview.series.DataPoint;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -23,6 +27,13 @@ import java.util.UUID;
 
 
 public class Serqet extends Activity {
+
+    private GraphView graph;
+
+    DataPoint[] points;
+
+    LineGraphSeries wave;
+    LineGraphSeries trigger;
 
     private ToggleButton couplingButton;
     private ToggleButton triggerEdgeButton;
@@ -51,12 +62,12 @@ public class Serqet extends Activity {
 
     private int[] AVERAGING_MODES = {1, 2, 4, 8};
     private double VOLTAGE_RANGE_MAX = 30;
-    private double VOLTAGE_RANGE_MIN = 0.001;
+    private double VOLTAGE_RANGE_MIN = 0.03;
     private double VOLTAGE_OFFSET_MAX = 15;
     private double VOLTAGE_OFFSET_MIN = -15;
-    private double TIME_RANGE_MAX = 10;
-    private double TIME_RANGE_MIN = 0.001;
-    private double TIME_OFFSET_MAX = 10;
+    private double TIME_RANGE_MAX = 2;
+    private double TIME_RANGE_MIN = 0.00002;
+    private double TIME_OFFSET_MAX = 1;
     private double TIME_OFFSET_MIN = 0;
     private double TRIGGER_LEVEL_MAX = 15;
     private double TRIGGER_LEVEL_MIN = -15;
@@ -65,6 +76,15 @@ public class Serqet extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_serqet);
+
+        graph = (GraphView) findViewById(R.id.graph);
+
+        wave = new LineGraphSeries<DataPoint>();
+        trigger = new LineGraphSeries<DataPoint>();
+        trigger.setColor(0xffff0000);
+
+        graph.addSeries(wave);
+        graph.addSeries(trigger);
 
         couplingButton = (ToggleButton) findViewById(R.id.couplingButton);
         triggerEdgeButton = (ToggleButton) findViewById(R.id.triggerEdgeButton);
@@ -93,6 +113,9 @@ public class Serqet extends Activity {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 updateSettings();
+                if(seekBar.equals(triggerLevelBar)){
+                    updateTrigger();
+                }
             }
         };
 
@@ -106,8 +129,9 @@ public class Serqet extends Activity {
         triggerLevelBar.setOnSeekBarChangeListener(seekBarListener);
         averagingBar.setOnSeekBarChangeListener(seekBarListener);
 
-
         updateSettings();
+        updateTrigger();
+        updateWave();
     }
 
 
@@ -146,24 +170,61 @@ public class Serqet extends Activity {
 
     public void updateSettings(){
         voltageRangeValue = getRangeValueFromBar(voltageRangeBar, VOLTAGE_RANGE_MAX, VOLTAGE_RANGE_MIN);
-
         timeRangeValue = getRangeValueFromBar(timeRangeBar, TIME_RANGE_MAX, TIME_RANGE_MIN);
 
-        voltageOffsetValue = getValueFromBar(voltageOffsetBar, VOLTAGE_OFFSET_MAX, VOLTAGE_OFFSET_MIN);
+        double voltageScaleFactor = voltageRangeValue / VOLTAGE_RANGE_MAX;
+        double timeScaleFactor = timeRangeValue / TIME_RANGE_MAX;
 
-        timeOffsetValue = getValueFromBar(timeOffsetBar, TIME_OFFSET_MAX, TIME_OFFSET_MIN);
-        triggerLevelValue = getValueFromBar(triggerLevelBar, TRIGGER_LEVEL_MAX, TRIGGER_LEVEL_MIN);
+        voltageOffsetValue = getValueFromBar(
+                voltageOffsetBar,
+                voltageScaleFactor * VOLTAGE_OFFSET_MAX,
+                voltageScaleFactor * VOLTAGE_OFFSET_MIN
+        );
+        timeOffsetValue = getValueFromBar(
+                timeOffsetBar,
+                timeScaleFactor * TIME_OFFSET_MAX,
+                timeScaleFactor * TIME_OFFSET_MIN
+        );
+        triggerLevelValue = getValueFromBar(
+                triggerLevelBar,
+                voltageScaleFactor * TRIGGER_LEVEL_MAX,
+                voltageScaleFactor * TRIGGER_LEVEL_MIN
+        );
         averagingValue = AVERAGING_MODES[averagingBar.getProgress()];
 
-        voltageRangeValueText.setText(String.format("%.3fV", voltageRangeValue));
-        voltageOffsetValueText.setText(String.format("%.3fV", voltageOffsetValue));
-        timeRangeValueText.setText(String.format("%.3fs", timeRangeValue));
-        timeOffsetValueText.setText(String.format("%.3fs", timeOffsetValue));
+        voltageRangeValueText.setText(formatNumber(voltageRangeValue) + "V");
+        voltageOffsetValueText.setText(formatNumber(voltageOffsetValue) + "V");
+        timeRangeValueText.setText(formatNumber(timeRangeValue) + "s");
+        timeOffsetValueText.setText(formatNumber(timeOffsetValue) + "s");
 
-        triggerLevelValueText.setText(String.format("%.3fV", triggerLevelValue));
+        triggerLevelValueText.setText(formatNumber(triggerLevelValue) + "V");
         averagingValueText.setText(averagingValue == 1 ? "Off" : averagingValue + "x");
 
-        System.out.println("update");
+        graph.getViewport().setXAxisBoundsManual(true);
+        graph.getViewport().setMaxX(timeOffsetValue + timeRangeValue);
+        graph.getViewport().setMinX(timeOffsetValue);
+        graph.getViewport().setYAxisBoundsManual(true);
+        graph.getViewport().setMaxY(voltageOffsetValue + voltageRangeValue / 2);
+        graph.getViewport().setMinY(voltageOffsetValue - voltageRangeValue / 2);
+
+        graph.onDataChanged(true, false);
+    }
+
+    public void updateTrigger(){
+        trigger.resetData(new DataPoint[]{
+                new DataPoint(-1000000, triggerLevelValue),
+                new DataPoint(1000000, triggerLevelValue)
+        });
+    }
+
+    public void updateWave(){
+        points = new DataPoint[1024];
+
+        for (int i = 0; i < 1024; i++){
+            points[i] = new DataPoint(i/1000.0, Math.sin(i*2*Math.PI/50));
+        }
+
+        wave.resetData(points);
     }
 
     public double getValueFromBar(SeekBar bar, double max, double min){
@@ -174,6 +235,16 @@ public class Serqet extends Activity {
     public double getRangeValueFromBar(SeekBar bar, double max, double min){
         float fraction = ((float)bar.getProgress()) / bar.getMax();
         return Math.exp((fraction) * (Math.log(max) - Math.log(min)) + Math.log(min));
+    }
+
+    public String formatNumber(double num){
+        if(Math.abs(num) >= 1){
+            return String.format("%.3f", num);
+        }
+        if(Math.abs(num) >= 0.001){
+            return String.format("%.3fm", num * 1000);
+        }
+        return String.format("%.3fμ", num * 1000000);
     }
 
     public void manageBluetooth (View view ) {
