@@ -146,8 +146,11 @@ public class Serqet extends Activity {
 
     public void updateSettings(){
         voltageRangeValue = getRangeValueFromBar(voltageRangeBar, VOLTAGE_RANGE_MAX, VOLTAGE_RANGE_MIN);
-        voltageOffsetValue = getValueFromBar(voltageOffsetBar, VOLTAGE_OFFSET_MAX, VOLTAGE_OFFSET_MIN);
+
         timeRangeValue = getRangeValueFromBar(timeRangeBar, TIME_RANGE_MAX, TIME_RANGE_MIN);
+
+        voltageOffsetValue = getValueFromBar(voltageOffsetBar, VOLTAGE_OFFSET_MAX, VOLTAGE_OFFSET_MIN);
+
         timeOffsetValue = getValueFromBar(timeOffsetBar, TIME_OFFSET_MAX, TIME_OFFSET_MIN);
         triggerLevelValue = getValueFromBar(triggerLevelBar, TRIGGER_LEVEL_MAX, TRIGGER_LEVEL_MIN);
         averagingValue = AVERAGING_MODES[averagingBar.getProgress()];

@@ -9,10 +9,10 @@
     android:orientation="horizontal">
 
 
-    <TextureView
+    <com.jjoe64.graphview.GraphView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/graphView"
+        android:id="@+id/graph"
         android:layout_weight="10"
         android:layout_margin="5dp" />
 
