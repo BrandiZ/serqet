@@ -30,6 +30,15 @@
             android:layout_gravity="right"
             android:layout_margin="5dp">
 
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Bluetooth Connect"
+                android:id="@+id/bluetoothButton"
+                android:onClick="startBluetooth"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="5dp" />
+
             <ToggleButton
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -231,6 +240,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/averagingSeekBar"
                 android:indeterminate="false" />
+
         </LinearLayout>
     </ScrollView>
 

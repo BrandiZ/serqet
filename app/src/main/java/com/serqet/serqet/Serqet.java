@@ -19,6 +19,8 @@ import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.LineGraphSeries;
 import com.jjoe64.graphview.series.DataPoint;
 
+import com.redbear.simplecontrols.RBLService;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -242,30 +244,28 @@ public class Serqet extends Activity {
             return String.format("%.3f", num);
         }
         if(Math.abs(num) >= 0.001){
-            return String.format("%.3fm", num * 1000);
+            return String.format("%.1fm", num * 1000);
         }
-        return String.format("%.3fμ", num * 1000000);
+        return String.format("%.1fμ", num * 1000000);
     }
 
-    public void manageBluetooth (View view ) {
+    public void startBluetooth (View view ) {
         BluetoothSocket mmSocket;
-
-        TextView textView = new TextView(this);
-        textView.setTextSize(40);
-        // Set the text view as the activity layout
-        setContentView(textView);
-
 
         InputStream mmInStream=null;
 
         BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if (mBluetoothAdapter == null) {
+            Toast.makeText(getApplicationContext(), "Bluetooth Adapter is null", Toast.LENGTH_LONG).show();
+            return;
             // Device does not support Bluetooth
         }
 
         if (!mBluetoothAdapter.isEnabled()) {
-            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(enableBtIntent, 1);
+            Toast.makeText(getApplicationContext(), "Bluetooth Adapter is not enabled", Toast.LENGTH_LONG).show();
+            return;
+//            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+//            startActivityForResult(enableBtIntent, 1);
         }
 
         Set<BluetoothDevice> pairedDevices =  BluetoothAdapter.getDefaultAdapter().getBondedDevices(); // get list of paired devices
@@ -273,61 +273,61 @@ public class Serqet extends Activity {
 
         for (BluetoothDevice device : pairedDevices) {
             String name = device.getName();
-            if (name.contains("HC-05")) {
-                mmDevice = BluetoothAdapter.getDefaultAdapter().getRemoteDevice(device.getAddress());
-                Toast.makeText(getApplicationContext(), "Retrieved paired device",
-                        Toast.LENGTH_SHORT).show();
+            if (name.contains("Serqet")) {
+                mmDevice = device;
+                Toast.makeText(getApplicationContext(), "Retrieved paired device  " + device.getAddress(), Toast.LENGTH_LONG).show();
                 break;
             }
         }
 
-        UUID uuid = UUID.fromString("00001101-0000-1000-8000-00805f9b34fb"); // Standard SerialPortService ID
-        try {
-            mBluetoothAdapter.cancelDiscovery();
-            mmSocket = mmDevice.createInsecureRfcommSocketToServiceRecord(uuid);
-            try {
-                mmSocket.connect();
-                try {
-                    mmInStream = mmSocket.getInputStream();
-
-                    Toast.makeText(getApplicationContext(), "Connected",
-                            Toast.LENGTH_SHORT).show();
-
-
-                } catch (IOException e_getin) {
-                }
-            } catch (IOException econnect) {
-            }
-        } catch (IOException ecreate) {
+        if(mmDevice == null){
+            Toast.makeText(getApplicationContext(), "Could not find Serqet", Toast.LENGTH_LONG).show();
         }
 
-        byte[] buffer = new byte[1024];  // buffer store for the stream
-        char[] cBuffer = new char[1024];  // buffer store for the stream
-
-
-        int bytes; // bytes returned from read()
-
-        // Keep listening to the InputStream until an exception occurs
-       // while (true)
-        try {
-            // Read from the InputStream
-//            bytes = mmInStream.read(buffer);
-            InputStreamReader mInputStreamReader = new InputStreamReader(mmInStream);
-            int num = mInputStreamReader.read (cBuffer, 0, 40);
-
-
-            // Send the obtained bytes to the UI activity
-
-            Log.i("Serqet", "Serqet.getView() - got bytes " + num);
-
-            // Create the text view
-
-            textView.append(new String(cBuffer));
-
-
-
-        } catch (IOException e) {
-        }
+//        UUID uuid = UUID.fromString("00001800-0000-1000-8000-00805f9b34fb");
+//        UUID uuid = UUID.fromString("00001801-0000-1000-8000-00805f9b34fb");
+//        UUID uuid = UUID.fromString("0000941e-0000-1000-8000-00805f9b34fb");
+//        try {
+//            mBluetoothAdapter.cancelDiscovery();
+//            mmSocket = mmDevice.createInsecureRfcommSocketToServiceRecord(uuid);
+//            mmSocket.connect();
+//
+//            mmInStream = mmSocket.getInputStream();
+//
+//            Toast.makeText(getApplicationContext(), "Connected", Toast.LENGTH_LONG).show();
+//
+//        } catch (Exception e) {
+//            Toast.makeText(getApplicationContext(), "Exception: " + e.toString(), Toast.LENGTH_LONG).show();
+//            System.out.println(e.toString());
+//        }
+//
+//        byte[] buffer = new byte[1024];  // buffer store for the stream
+//        char[] cBuffer = new char[1024];  // buffer store for the stream
+//
+//
+//        int bytes; // bytes returned from read()
+//
+//        // Keep listening to the InputStream until an exception occurs
+//       // while (true)
+//        try {
+//            // Read from the InputStream
+////            bytes = mmInStream.read(buffer);
+//            InputStreamReader mInputStreamReader = new InputStreamReader(mmInStream);
+//            int num = mInputStreamReader.read (cBuffer, 0, 40);
+//
+//
+//            // Send the obtained bytes to the UI activity
+//
+//            Log.i("Serqet", "Serqet.getView() - got bytes " + num);
+//
+//            // Create the text view
+//
+//            textView.append(new String(cBuffer));
+//
+//
+//
+//        } catch (IOException e) {
+//        }
 
 
     }
